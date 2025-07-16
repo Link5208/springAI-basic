@@ -12,6 +12,8 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Service;
 
+import com.springai.openai_demo.text.prompttemplate.dtos.CountryCuisines;
+
 @Service
 public class OpenAiService {
 	private ChatClient chatClient;
@@ -45,5 +47,20 @@ public class OpenAiService {
 				" Enjoy your trip!");
 		Prompt prompt = promptTemplate.create(Map.of("city", city, "month", month, "language", language, "budget", budget));
 		return chatClient.prompt(prompt).call().chatResponse().getResult().getOutput().getText();
+	}
+
+	public CountryCuisines getCuisines(String country, String numCuisines, String language) {
+		PromptTemplate promptTemplate = new PromptTemplate(" You are an expert in traditional cuisines.\r\n" +
+				" You provide information about a specific dish from a specific\r\n" +
+				" country.\r\n" +
+				" Answer the question: What is the traditional cuisine of {country}?\r\n" +
+				" Return a list of {numCuisines} in {language}." +
+				" Avoid giving information about fictional places. If the country is\r\n" +
+				" fictional\r\n" +
+				" or non-existent answer: I don't know.\r\n" +
+				"");
+		Prompt prompt = promptTemplate
+				.create(Map.of("country", country, "language", language, "numCuisines", numCuisines));
+		return chatClient.prompt(prompt).call().entity(CountryCuisines.class);
 	}
 }
