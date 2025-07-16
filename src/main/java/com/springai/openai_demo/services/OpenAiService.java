@@ -63,4 +63,15 @@ public class OpenAiService {
 				.create(Map.of("country", country, "language", language, "numCuisines", numCuisines));
 		return chatClient.prompt(prompt).call().entity(CountryCuisines.class);
 	}
+
+	public String getInterviewHelper(String company, String jobTitle, String strengths, String weaknesses) {
+		PromptTemplate promptTemplate = new PromptTemplate(
+				" You are a career coach. Provide tailored interview tips for the\r\n" + //
+						" position of {jobTitle} at {company}.\r\n" + //
+						" Highlight your strengths in {strengths} and prepare for questions\r\n" + //
+						" about your weaknesses such as {weaknesses}");
+		Prompt prompt = promptTemplate
+				.create(Map.of("jobTitle", jobTitle, "company", company, "weaknesses", weaknesses, "strengths", strengths));
+		return chatClient.prompt(prompt).call().chatResponse().getResult().getOutput().getText();
+	}
 }
