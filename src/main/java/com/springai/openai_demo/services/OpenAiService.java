@@ -150,4 +150,12 @@ public class OpenAiService {
 				.content();
 		return explaination;
 	}
+
+	public String getDietAdvice(String prompt, String path1, String path2) {
+		String explaination = chatClient.prompt()
+				.user(u -> u.text(prompt).media(MimeTypeUtils.IMAGE_JPEG, new FileSystemResource(path1)))
+				.user(u -> u.text(prompt).media(MimeTypeUtils.IMAGE_JPEG, new FileSystemResource(path2)))
+				.call().content();
+		return explaination;
+	}
 }
