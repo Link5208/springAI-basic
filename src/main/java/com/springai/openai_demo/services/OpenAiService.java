@@ -3,6 +3,7 @@ package com.springai.openai_demo.services;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.ai.audio.transcription.AudioTranscriptionPrompt;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -15,6 +16,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.image.ImageResponse;
+import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiImageModel;
 import org.springframework.ai.openai.OpenAiImageOptions;
 // import org.springframework.ai.vectorstore.VectorStore;
@@ -34,6 +36,8 @@ public class OpenAiService {
 	private EmbeddingModel embeddingModel;
 	@Autowired
 	private OpenAiImageModel openAiImageModel;
+	@Autowired
+	private OpenAiAudioTranscriptionModel openAiAudioTranscriptionModel;
 	// @Autowired
 	// private VectorStore vectorStore;
 
@@ -157,5 +161,10 @@ public class OpenAiService {
 				.user(u -> u.text(prompt).media(MimeTypeUtils.IMAGE_JPEG, new FileSystemResource(path2)))
 				.call().content();
 		return explaination;
+	}
+
+	public String speechToText(String path) {
+		AudioTranscriptionPrompt transcriptionPrompt = new AudioTranscriptionPrompt(new FileSystemResource(path));
+		return openAiAudioTranscriptionModel.call(transcriptionPrompt).getResult().getOutput();
 	}
 }
