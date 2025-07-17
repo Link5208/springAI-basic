@@ -52,6 +52,12 @@ public class OpenAiService {
 		return chatClient.prompt(question).call().chatResponse();
 	}
 
+	public ChatResponse generateAnswerWithRoles(String question) {
+		return chatClient.prompt(question).system("You are a helpful assistant that can answer any question")
+				.user(question)
+				.call().chatResponse();
+	}
+
 	public String getTravelGuidance(String city, String month, String language, String budget) {
 		PromptTemplate promptTemplate = new PromptTemplate(" Welcome to the {city} travel guide!\r\n" +
 				" If you're visiting in {month}, here's what you can do:\r\n" +
