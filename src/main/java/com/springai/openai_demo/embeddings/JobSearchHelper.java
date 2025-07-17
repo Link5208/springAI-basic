@@ -26,8 +26,8 @@ public class JobSearchHelper {
 
 	@PostMapping("/jobSearchHelper")
 	public String jobSearchHelper(@RequestParam String query, Model model) {
-		List<Document> response = service.searchJobs(query);
-		model.addAttribute("response", response);
+		// List<Document> response = service.searchJobs(query);
+		// model.addAttribute("response", response);
 		return "jobSearchHelper";
 
 	}

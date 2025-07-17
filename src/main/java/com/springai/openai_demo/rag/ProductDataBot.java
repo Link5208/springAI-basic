@@ -23,7 +23,7 @@ public class ProductDataBot {
 
 	@PostMapping("/productDataBot")
 	public String productDataBot(@RequestParam String query, Model model) {
-
+		// model.addAttribute("response", service.answer(query);)
 		return "productDataBot";
 
 	}
