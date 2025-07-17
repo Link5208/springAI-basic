@@ -13,6 +13,10 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.image.ImagePrompt;
+import org.springframework.ai.image.ImageResponse;
+import org.springframework.ai.openai.OpenAiImageModel;
+import org.springframework.ai.openai.OpenAiImageOptions;
 // import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,8 @@ public class OpenAiService {
 	private ChatClient chatClient;
 	@Autowired
 	private EmbeddingModel embeddingModel;
+	@Autowired
+	private OpenAiImageModel openAiImageModel;
 	// @Autowired
 	// private VectorStore vectorStore;
 
@@ -122,4 +128,10 @@ public class OpenAiService {
 	// return chatClient.prompt(query).advisors(new
 	// QuestionAnswerAdvisor(vectorStore)).call().content();
 	// }
+
+	public String generateImage(String prompt) {
+		ImageResponse response = openAiImageModel.call(new ImagePrompt(prompt, OpenAiImageOptions.builder().quality("hd")
+				.height(1024).width(1024).N(1).build()));
+		return response.getResult().getOutput().getUrl();
+	}
 }
