@@ -16,9 +16,12 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.image.ImageResponse;
+import org.springframework.ai.openai.OpenAiAudioSpeechOptions;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
+import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
 import org.springframework.ai.openai.OpenAiImageModel;
 import org.springframework.ai.openai.OpenAiImageOptions;
+import org.springframework.ai.openai.api.OpenAiAudioApi.TranscriptResponseFormat;
 // import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -164,6 +167,9 @@ public class OpenAiService {
 	}
 
 	public String speechToText(String path) {
+		OpenAiAudioTranscriptionOptions options = OpenAiAudioTranscriptionOptions.builder()
+				.language("fr")
+				.responseFormat(TranscriptResponseFormat.VTT).build();
 		AudioTranscriptionPrompt transcriptionPrompt = new AudioTranscriptionPrompt(new FileSystemResource(path));
 		return openAiAudioTranscriptionModel.call(transcriptionPrompt).getResult().getOutput();
 	}
