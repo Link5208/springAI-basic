@@ -32,6 +32,7 @@ import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
 
 import com.springai.openai_demo.text.prompttemplate.dtos.CountryCuisines;
+import com.springai.openai_demo.tools.WeatherTools;
 
 @Service
 public class OpenAiService {
@@ -179,5 +180,9 @@ public class OpenAiService {
 
 	public byte[] textToSpeech(String text) {
 		return openAiAudioSpeechModel.call(text);
+	}
+
+	public String callAgent(String query) {
+		return chatClient.prompt(query).tools(new WeatherTools()).call().content();
 	}
 }
