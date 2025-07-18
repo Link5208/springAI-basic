@@ -38,6 +38,8 @@ import org.springframework.util.MimeTypeUtils;
 import com.springai.openai_demo.text.prompttemplate.dtos.CountryCuisines;
 import com.springai.openai_demo.tools.WeatherTools;
 
+import reactor.core.publisher.Flux;
+
 @Service
 public class OpenAiService {
 	private ChatClient chatClient;
@@ -70,6 +72,10 @@ public class OpenAiService {
 		// options.setTemperature(0.7);
 		// options.setMaxTokens(20);
 		return chatClient.prompt(question).call().chatResponse();
+	}
+
+	public Flux<String> streamAnswer(String message) {
+		return chatClient.prompt(message).stream().content();
 	}
 
 	public ChatResponse generateAnswerWithRoles(String question) {
