@@ -16,12 +16,16 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.image.ImageResponse;
+import org.springframework.ai.moderation.Moderation;
+import org.springframework.ai.moderation.ModerationPrompt;
+import org.springframework.ai.moderation.ModerationResult;
 import org.springframework.ai.openai.OpenAiAudioSpeechModel;
 import org.springframework.ai.openai.OpenAiAudioSpeechOptions;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
 import org.springframework.ai.openai.OpenAiImageModel;
 import org.springframework.ai.openai.OpenAiImageOptions;
+import org.springframework.ai.openai.OpenAiModerationModel;
 import org.springframework.ai.openai.api.OpenAiAudioApi.TranscriptResponseFormat;
 // import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +49,8 @@ public class OpenAiService {
 	private OpenAiAudioTranscriptionModel openAiAudioTranscriptionModel;
 	@Autowired
 	private OpenAiAudioSpeechModel openAiAudioSpeechModel;
+	@Autowired
+	private OpenAiModerationModel moderationModel;
 	// @Autowired
 	// private VectorStore vectorStore;
 
@@ -184,5 +190,10 @@ public class OpenAiService {
 
 	public String callAgent(String query) {
 		return chatClient.prompt(query).tools(new WeatherTools()).call().content();
+	}
+
+	public ModerationResult moderate(String text) {
+		Moderation moderation = moderationModel.call(new ModerationPrompt(text)).getResult().getOutput();
+		return moderation.getResults().get(0);
 	}
 }

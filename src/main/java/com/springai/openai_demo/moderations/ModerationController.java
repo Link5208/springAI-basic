@@ -1,5 +1,6 @@
 package com.springai.openai_demo.moderations;
 
+import org.springframework.ai.moderation.ModerationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +14,7 @@ import com.springai.openai_demo.services.OpenAiService;
 public class ModerationController {
 
 	@Autowired
-	private OpenAiService chatService;
+	private OpenAiService service;
 
 	@GetMapping("/showModeration")
 	public String showChatPage() {
@@ -22,6 +23,8 @@ public class ModerationController {
 
 	@PostMapping("/moderation")
 	public String getChatResponse(@RequestParam("text") String text, Model model) {
+		ModerationResult moderationResult = service.moderate(text);
+		model.addAttribute("response", moderationResult);
 		return "moderation";
 	}
 }
